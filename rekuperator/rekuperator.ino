@@ -1,7 +1,7 @@
 const int ledPin =  13;      // the number of the LED pin
 
 int sensorPin = A0; // select the input pin for the potentiometer
-int fan1PWMPin = 3;  // EBM fan IN
+int fan1PWMPin = 3;  // EBM fan IN 
 int fan2PWMPin = 11;  // EBM fan OUT
 int fan1IntPin = 2;
 int fan2IntPin = 7;
@@ -16,6 +16,10 @@ unsigned long fan1TimeOld;
 void setup() {
   // initialize serial communication at 9600 bits per second:
   Serial.begin(9600);
+ 
+  //http://forum.arduino.cc/index.php?topic=16612#msg121031
+  // Pins 11 and 3
+  TCCR2B = TCCR2B & 0b11111000 | 0x02; //Frequency 3906.25 Hz
   // initialize the LED pin as an output:
   pinMode(ledPin, OUTPUT);
   
@@ -23,7 +27,7 @@ void setup() {
   pinMode(fan1PWMPin,OUTPUT); //scale of 0 - 255
   pinMode(fan2PWMPin,OUTPUT); //scale of 0 - 255 
   
-  attachInterrupt(digitalPinToInterrupt(fan1IntPin), fan1_func, FALLING);
+  //attachInterrupt(digitalPinToInterrupt(fan1IntPin), fan1_func, FALLING);
   fan1 = 0;
   fan1RPM = 0;
   fan1TimeOld = 0;
@@ -32,7 +36,7 @@ void setup() {
 void loop() {
   delay(1000);
   //Don't process interrupts during calculations
-  detachInterrupt(0);
+//  detachInterrupt(0);
   // put your main code here, to run repeatedly:
   int sensorValue = analogRead(sensorPin)/4; //scale of 0 - 255
   int sensorValuePercent = (int) sensorValue/255.00*100.00;
@@ -52,11 +56,11 @@ void loop() {
   fan1TimeOld = millis();
   fan1 = 0;
   
-  attachInterrupt(digitalPinToInterrupt(fan1IntPin), fan1_func, FALLING);   
+//  attachInterrupt(digitalPinToInterrupt(fan1IntPin), fan1_func, FALLING);   
 }
 
 void fan1_func() {
   fan1++;
-  digitalWrite(ledPin, HIGH);
-  digitalWrite(ledPin, LOW);
+//  digitalWrite(ledPin, HIGH);
+//  digitalWrite(ledPin, LOW);
 }
